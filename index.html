@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RandomModDownloader V1.0</title>
+    <title>BETA RandomModDownloader V5.0</title>
     <style>
         * {
             margin: 0;
@@ -157,8 +157,7 @@
             gap: 25px;
             margin-bottom: 40px;
         }
-        
-        @media (max-width: 768px) {
+                @media (max-width: 768px) {
             .menu-grid {
                 grid-template-columns: 1fr;
             }
@@ -300,8 +299,7 @@
             grid-template-columns: repeat(2, 1fr);
             gap: 25px;
         }
-        
-        @media (max-width: 1200px) {
+                @media (max-width: 1200px) {
             .mod-list {
                 grid-template-columns: repeat(2, 1fr);
             }
@@ -478,8 +476,7 @@
             border-radius: 12px;
             border: 1px solid #444;
         }
-        
-        .light-theme .random-controls {
+                .light-theme .random-controls {
             background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%);
             border: 1px solid #ddd;
         }
@@ -702,8 +699,7 @@
             margin-top: 30px;
             flex-wrap: wrap;
         }
-        
-        .page-button {
+                .page-button {
             background: #333;
             color: white;
             border: none;
@@ -754,7 +750,7 @@
 <body>
     <div class="container">
         <header>
-            <h1>RandomModDownloader V1.0</h1>
+            <h1>BETA RandomModDownloader V5.0</h1>
             <p class="subtitle" id="subtitle">Случайный подбор контента для Minecraft из базы Modrinth</p>
             <button class="settings-button" onclick="toggleSettings()">⚙️</button>
             <div class="settings-panel" id="settings-panel">
@@ -830,8 +826,7 @@
                         </div>
                     </div>
                 </div>
-                
-                <div class="control-group">
+                                <div class="control-group">
                     <label class="control-label">Количество проектов:</label>
                     <div class="count-selector">
                         <input type="range" id="count-slider" class="count-slider" min="2" max="50" step="2" value="10" oninput="updateCountDisplay()">
@@ -948,8 +943,7 @@
                 <!-- Случайные результаты будут добавлены через JavaScript -->
             </div>
         </div>
-        
-        <!-- Секция нового контента -->
+                <!-- Секция нового контента -->
         <div id="recent-section" class="content-section">
             <div class="content-header">
                 <h2 id="recent-content-title">Новые проекты Modrinth</h2>
@@ -1044,7 +1038,7 @@
         </div>
         
         <footer>
-            <p>RandomModDownloader V1.0 © 2025</p>
+            <p>BETA RandomModDownloader V5.0 © 2025</p>
             <div class="social-links">
                 <a href="https://www.youtube.com/@ozc2001" class="social-link" target="_blank">YouTube</a>
                 <a href="https://www.reddit.com/user/Old_Prompt6029/" class="social-link" target="_blank">Reddit</a>
@@ -1111,7 +1105,7 @@
                 of: "из",
                 noProjects: "Проекты не найдены. Попробуйте изменить фильтры.",
                 errorLoading: "Ошибка при загрузке данных",
-                notificationReady: "BETA RandomModDownloader V4.0 готов к работе!",
+                notificationReady: "BETA RandomModDownloader V5.0 готов к работе!",
                 notificationRandom: "случайных проектов загружено",
                 notificationRecent: "новых проектов загружено"
             },
@@ -1159,7 +1153,7 @@
                 of: "of",
                 noProjects: "No projects found. Try changing filters.",
                 errorLoading: "Error loading data",
-                notificationReady: "BETA RandomModDownloader V4.0 is ready!",
+                notificationReady: "BETA RandomModDownloader V5.0 is ready!",
                 notificationRandom: "random projects loaded",
                 notificationRecent: "new projects loaded"
             }
@@ -1333,25 +1327,25 @@
                 recentItemsPerPage = parseInt(document.getElementById('items-per-page').value);
                 
                 // Формируем параметры запроса
-                let facets = [];
+                let facetsArray = [];
                 
                 if (selectedTypes.length > 0 && !selectedTypes.includes('all')) {
-                    facets.push(`["project_type:${selectedTypes.join(',')}"]`);
+                    facetsArray.push(selectedTypes.map(type => `project_type:${type}`));
                 }
                 
                 if (selectedVersions.length > 0 && !selectedVersions.includes('all')) {
-                    facets.push(`["versions:${selectedVersions.join(',')}"]`);
+                    facetsArray.push(selectedVersions.map(version => `versions:${version}`));
                 }
                 
                 let apiUrl = `https://api.modrinth.com/v2/search?limit=100&index=newest`;
                 
-                if (facets.length > 0) {
-                    apiUrl += `&facets=[${facets.join(',')}]`;
+                if (facetsArray.length > 0) {
+                    apiUrl += `&facets=${encodeURIComponent(JSON.stringify(facetsArray))}`;
                 }
                 
                 const response = await fetch(apiUrl, {
                     headers: {
-                        'User-Agent': 'RandomModDownloader/4.0',
+                        'User-Agent': 'RandomModDownloader/5.0',
                         'Accept': 'application/json'
                     }
                 });
@@ -1404,39 +1398,39 @@
                 const selectedSizes = getSelectedValues('size');
                 
                 // Формируем параметры facets для запроса
-                let facets = [];
+                let facetsArray = [];
                 
                 if (selectedTypes.length > 0 && !selectedTypes.includes('all')) {
                     // Для каждого типа делаем отдельный запрос и объединяем результаты
                     const allResults = [];
                     
                     for (const type of selectedTypes) {
-                        let typeFacets = [];
+                        let typeFacetsArray = [];
                         
                         if (selectedLoaders.length > 0 && !selectedLoaders.includes('all')) {
-                            typeFacets.push(`["categories:${selectedLoaders.join(',')}"]`);
+                            typeFacetsArray.push(selectedLoaders.map(loader => `categories:${loader}`));
                         }
                         
                         if (selectedVersions.length > 0 && !selectedVersions.includes('all')) {
-                            typeFacets.push(`["versions:${selectedVersions.join(',')}"]`);
+                            typeFacetsArray.push(selectedVersions.map(version => `versions:${version}`));
                         }
                         
                         if (selectedSizes.length > 0 && !selectedSizes.includes('all')) {
-                            typeFacets.push(`["categories:${selectedSizes.join(',')}"]`);
+                            typeFacetsArray.push(selectedSizes.map(size => `categories:${size}`));
                         }
                         
-                        typeFacets.push(`["project_type:${type}"]`);
+                        typeFacetsArray.push([`project_type:${type}`]);
                         
                         // Для настоящего случайного контента используем случайное смещение
                         let countUrl = 'https://api.modrinth.com/v2/search?limit=1';
                         
-                        if (typeFacets.length > 0) {
-                            countUrl += `&facets=[${typeFacets.join(',')}]`;
+                        if (typeFacetsArray.length > 0) {
+                            countUrl += `&facets=${encodeURIComponent(JSON.stringify(typeFacetsArray))}`;
                         }
                         
                         const countResponse = await fetch(countUrl, {
                             headers: {
-                                'User-Agent': 'RandomModDownloader/4.0',
+                                'User-Agent': 'RandomModDownloader/5.0',
                                 'Accept': 'application/json'
                             }
                         });
@@ -1458,13 +1452,13 @@
                             // Формируем URL для получения случайных проектов
                             let apiUrl = `https://api.modrinth.com/v2/search?limit=${typeCount}&offset=${randomOffset}`;
                             
-                            if (typeFacets.length > 0) {
-                                apiUrl += `&facets=[${typeFacets.join(',')}]`;
+                            if (typeFacetsArray.length > 0) {
+                                apiUrl += `&facets=${encodeURIComponent(JSON.stringify(typeFacetsArray))}`;
                             }
                             
                             const response = await fetch(apiUrl, {
                                 headers: {
-                                    'User-Agent': 'RandomModDownloader/4.0',
+                                    'User-Agent': 'RandomModDownloader/5.0',
                                     'Accept': 'application/json'
                                 }
                             });
@@ -1489,27 +1483,27 @@
                 } else {
                     // Если выбран "Все типы", используем старую логику
                     if (selectedLoaders.length > 0 && !selectedLoaders.includes('all')) {
-                        facets.push(`["categories:${selectedLoaders.join(',')}"]`);
+                        facetsArray.push(selectedLoaders.map(loader => `categories:${loader}`));
                     }
                     
                     if (selectedVersions.length > 0 && !selectedVersions.includes('all')) {
-                        facets.push(`["versions:${selectedVersions.join(',')}"]`);
+                        facetsArray.push(selectedVersions.map(version => `versions:${version}`));
                     }
                     
                     if (selectedSizes.length > 0 && !selectedSizes.includes('all')) {
-                        facets.push(`["categories:${selectedSizes.join(',')}"]`);
+                        facetsArray.push(selectedSizes.map(size => `categories:${size}`));
                     }
                     
                     // Для настоящего случайного контента используем случайное смещение
                     let countUrl = 'https://api.modrinth.com/v2/search?limit=1';
                     
-                    if (facets.length > 0) {
-                        countUrl += `&facets=[${facets.join(',')}]`;
+                    if (facetsArray.length > 0) {
+                        countUrl += `&facets=${encodeURIComponent(JSON.stringify(facetsArray))}`;
                     }
                     
                     const countResponse = await fetch(countUrl, {
                         headers: {
-                            'User-Agent': 'RandomModDownloader/4.0',
+                            'User-Agent': 'RandomModDownloader/5.0',
                             'Accept': 'application/json'
                         }
                     });
@@ -1530,13 +1524,13 @@
                         // Формируем URL для получения случайных проектов
                         let apiUrl = `https://api.modrinth.com/v2/search?limit=${randomCount}&offset=${randomOffset}`;
                         
-                        if (facets.length > 0) {
-                            apiUrl += `&facets=[${facets.join(',')}]`;
+                        if (facetsArray.length > 0) {
+                            apiUrl += `&facets=${encodeURIComponent(JSON.stringify(facetsArray))}`;
                         }
                         
                         const response = await fetch(apiUrl, {
                             headers: {
-                                'User-Agent': 'RandomModDownloader/4.0',
+                                'User-Agent': 'RandomModDownloader/5.0',
                                 'Accept': 'application/json'
                             }
                         });
@@ -1743,7 +1737,7 @@
 
         // Инициализация при загрузке страницы
         window.onload = function() {
-            showNotification('BETA RandomModDownloader V4.0 ' + (currentLanguage === 'ru' ? 'готов к работе!' : 'is ready!'), 'success');
+            showNotification('BETA RandomModDownloader V5.0 ' + (currentLanguage === 'ru' ? 'готов к работе!' : 'is ready!'), 'success');
             updateCountDisplay();
             
             // Устанавливаем английский язык по умолчанию
